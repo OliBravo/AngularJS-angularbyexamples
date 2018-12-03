@@ -1,5 +1,7 @@
-angular.module('7minWorkout').controller('WorkoutController', 
-    function ($scope){
+'use strict';
+
+angular.module('7minWorkout').controller('WorkoutController', ['$scope', '$interval', 
+    function ($scope, $interval){
 
         function Exercise(args){
             this.name = args.name;
@@ -30,9 +32,9 @@ angular.module('7minWorkout').controller('WorkoutController',
                     name: "rest",
                     title: "Odpoczynek!",
                     description: "Odpocznij trochę ;)",
-                    image = "img/rest.png"
+                    image: "img/rest.png"
                 }),
-                duration = workoutPlan.restBetweenExercises
+                duration: workoutPlan.restBetweenExercises
             };
 
             startExercise(workoutPlan.exercises.shift());
@@ -238,6 +240,6 @@ angular.module('7minWorkout').controller('WorkoutController',
 
         init();
     }
-)
+]);
 
 
