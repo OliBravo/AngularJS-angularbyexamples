@@ -219,7 +219,20 @@ angular.module('7minWorkout').controller('WorkoutController', ['$scope', '$inter
 
             return workout;
   
-        }
+        };
+
+
+        var getNextExercise = function (currentExercisePlan) {
+            var nextExercise = null;
+            if (currentExercisePlan === restExercise) {
+                nextExercise = workoutPlan.exercises.shift();
+            } else {
+                if (workoutPlan.exercises.length != 0) {
+                    nextExercise = restExercise;
+                }
+            }
+            return nextExercise;
+        };
 
         var startExercise = function (exercisePlan){
             $scope.currentExercise = exercisePlan;
