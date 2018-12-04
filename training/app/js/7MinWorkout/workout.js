@@ -243,7 +243,14 @@ angular.module('7minWorkout').controller('WorkoutController', ['$scope', '$inter
                 },
                 1000,
                 $scope.currentExercise.duration
-            );
+            ).then(function (){
+                var next = getNextExercise(exercisePlan);
+                if (next) {
+                    startExercise(next);
+                } else {
+                    console.log("Trening zakonczony.")
+                }
+            });
         };
 
 
