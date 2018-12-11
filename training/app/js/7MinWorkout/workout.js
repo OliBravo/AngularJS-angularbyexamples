@@ -47,12 +47,18 @@ angular.module('7minWorkout')
               $scope.workoutTimeRemaining = $scope.workoutTimeRemaining - 1;
           }, 1000, $scope.workoutTimeRemaining);
 
-          startExercise($scope.workoutPlan.exercises.shift());
+          $scope.currentExerciseIndex = -1;
+          startExercise($scope.workoutPlan.exercises[0]);
       };
 
       var startExercise = function (exercisePlan) {
           $scope.currentExercise = exercisePlan;
           $scope.currentExerciseDuration = 0;
+
+          if (exercisePlan.details.name != 'rest') {
+              $scope.currentExerciseIndex++;
+          }
+
           $interval(function () {
               ++$scope.currentExerciseDuration;
           }, 1000, $scope.currentExercise.duration)
@@ -69,10 +75,10 @@ angular.module('7minWorkout')
       var getNextExercise = function (currentExercisePlan) {
           var nextExercise = null;
           if (currentExercisePlan === restExercise) {
-              nextExercise = $scope.workoutPlan.exercises.shift();
+              nextExercise = $scope.workoutPlan.exercises[$scope.currentExerciseIndex + 1];
           }
           else {
-              if ($scope.workoutPlan.exercises.length != 0) {
+              if ($scope.currentExerciseIndex < $scope.workoutPlan.exercises.length - 1) {
                   nextExercise = restExercise;
               }
           }
@@ -85,7 +91,7 @@ angular.module('7minWorkout')
       //        if (next) {
       //            startExercise(next);
       //        } else {
-      //            console.log("Trening został zakończony!")
+      //            console.log("Trening został zakończony!");
       //        }
       //    }
       //});
@@ -103,6 +109,7 @@ angular.module('7minWorkout')
                   title: "Pajacyki",
                   description: "Pajacyki to proste ćwiczenie fizyczne polegające na podskakiwaniu i wymachiwaniu rękoma.",
                   image: "img/JumpingJacks.png",
+                  nameSound: "content/jumpingjacks.wav",
                   videos: ["//www.youtube.com/embed/dmYwZH_BNd0", "//www.youtube.com/embed/BABOdJ-2Z6o", "//www.youtube.com/embed/c4DAnQ6DtF8"],
                   procedure: "Stań w pozycji wyprostowanej, złącz stopy, a ramiona opuść swobodnie wzdłuż tułowia. \
                               Zegnij lekko kolana, a następnie wyskocz kilkanaście centymetrów w górę. \
@@ -117,6 +124,7 @@ angular.module('7minWorkout')
                   title: "Krzesełko",
                   description: "Krzesełko to popularne ćwiczenie wzmacniające mięsień czworogłowy uda.",
                   image: "img/wallsit.png",
+                  nameSound: "content/wallsit.wav",
                   videos: ["//www.youtube.com/embed/y-wV4Venusw", "//www.youtube.com/embed/MMV3v4ap4ro"],
                   procedure: "Stań przy ścianie, opierając się o nią plecami. \
                               Stopy rozstaw na szerokość ramion i nieco odsuń od ściany. \
@@ -131,6 +139,7 @@ angular.module('7minWorkout')
                   title: "Pompki",
                   description: "Pompki to popularne ćwiczenie wykonywane w pozycji leżącej na brzuchu, polegające na podnoszeniu i opuszczaniu ciała na rękach.",
                   image: "img/Pushup.png",
+                  nameSound: "content/pushups.wav",
                   videos: ["//www.youtube.com/embed/Eh00_rniF8E", "//www.youtube.com/embed/ZWdBqFLNljc", "//www.youtube.com/embed/UwRLWMcOdwI", "//www.youtube.com/embed/ynPwl6qyUNM", "//www.youtube.com/embed/OicNTT2xzMI"],
                   procedure: "Połóż się na brzuchu, zegnij ręce w łokciach, a dłonie rozstawione na szerokość ramion lub nieco szerzej oprzyj na podłodze. \
                               Utrzymując ciało w jednej linii, podnieś się na rękach, aż do ich całkowitego wyprostowania. \
@@ -144,6 +153,7 @@ angular.module('7minWorkout')
                   title: "Napinanie brzucha",
                   description: "Proste napinanie mięśni brzucha jest podstawowym ćwiczeniem programu wzmacniającego.",
                   image: "img/crunches.png",
+                  nameSound: "content/crunches.wav",
                   videos: ["//www.youtube.com/embed/Xyd_fa5zoEU", "//www.youtube.com/embed/MKmrqcoCZ-M"],
                   procedure: "Połóż się na plecach, zegnij nogi w kolanach i postaw stopy rozsunięte na szerokość bioder na podłodze. \
                               Oprzyj dłonie z tyłu głowy tak, by kciuki znalazły się za uszami. \
@@ -159,6 +169,7 @@ angular.module('7minWorkout')
                   title: "Wchodzenie na krzesło",
                   description: "Wchodzenie na krzesło jest doskonałym ćwiczeniem do budowania mięśni dolnych partii ciała.",
                   image: "img/stepUpOntoChair.png",
+                  nameSound: "content/stepup.wav",
                   videos: ["//www.youtube.com/embed/aajhW7DD1EA"],
                   procedure: "Ustaw krzesło przed sobą. \
                               Stań w lekkim rozkroku, tak aby stopy były oddalone od siebie na szerokość ramion, a ręce opuść swobodnie wzdłuż ciała. \
@@ -173,6 +184,7 @@ angular.module('7minWorkout')
                   title: "Przysiady",
                   description: "Przysiady są złożonym ćwiczeniem obejmującym wiele partii ciała i trenującym głównie mięśnie ud, bioder i pośladków.",
                   image: "img/squat.png",
+                  nameSound: "content/squats.wav",
                   videos: ["//www.youtube.com/embed/QKKZ9AGYTi4", "//www.youtube.com/embed/UXJrBgI2RxA"],
                   procedure: "Stań prosto w rozkroku na szerokość ramion, klatkę piersiową wypnij do przodu. \
                               Wyciągnij ręce w poziomie przed siebie. Zginając kolana, obniżaj ciało tak, jakbyś chciał usiąść na krześle. \
@@ -189,6 +201,7 @@ angular.module('7minWorkout')
                   title: "Pompki w podporze tyłem",
                   description: "Pompki w podporze tyłem to ćwiczenie na masę mięśniową trenujące głównie triceps.",
                   image: "img/tricepdips.png",
+                  nameSound: "content/tricepdips.wav",
                   videos: ["//www.youtube.com/embed/tKjcgfu44sI", "//www.youtube.com/embed/jox1rb5krQI"],
                   procedure: "Usiądź na krześle. Nogi lekko wyprostuj, a stopy postaw płasko na podłodze. \
                               Oprzyj śródręcze dłoni tuż przy krawędzi krzesła, tak aby palce były skierowane pionowo w dół. \
@@ -203,6 +216,7 @@ angular.module('7minWorkout')
                   title: "Leżenie w podporze",
                   description: "Leżenie w podporze jest jednym z podstawowych siłowych ćwiczeń izometrycznych, polegających na utrzymywaniu trudnej pozycji przez dłuższy czas.",
                   image: "img/Plank.png",
+                  nameSound: "content/plank.wav",
                   videos: ["//www.youtube.com/embed/pSHjTRCQxIw", "//www.youtube.com/embed/TvxNkmjdhMM"],
                   procedure: "Połóż się na brzuchu i przyjmij pozycję jak podczas robienia pompek. \
                               Zegnij łokcie pod kątem 90 stopni i oprzyj ciężar ciała na przedramionach. \
@@ -217,6 +231,7 @@ angular.module('7minWorkout')
                   title: "Podnoszenie kolan",
                   description: "Podnoszenie kolan, popularnie określane jako skip-A, rozwija siłę i wytrzymałość zginaczy, mięśnia czworogłowego uda oraz mięśni prostowników uda.",
                   image: "img/highknees.png",
+                  nameSound: "content/highknees.wav",
                   videos: ["//www.youtube.com/embed/OAJ_J3EZkdY", "//www.youtube.com/embed/8opcQdC-V-U"],
                   procedure: "Stań prosto w rozkroku na szerokość ramion. \
                               Podnieś kolano w górę, dociągając je maksymalnie do klatki piersiowej. \
@@ -230,6 +245,7 @@ angular.module('7minWorkout')
                   title: "Wypady",
                   description: "Wypady są dobrym ćwiczeniem do wzmacniania, rzeźbienia i budowania kilku grup mięśni, w tym mięśnia czworogłowego, mięśni pośladkowych, jak również ścięgien podkolanowych.",
                   image: "img/lunges.png",
+                  nameSound: "content/lunge.wav",
                   videos: ["//www.youtube.com/embed/Z2n58m2i4jg"],
                   procedure: "Stań prosto w rozkroku na szerokość ramion. \
                               Połóż ręce na biodrach, wyprostuj plecy, rozluźnij ramiona i patrz przed siebie. \
@@ -245,6 +261,7 @@ angular.module('7minWorkout')
                   title: "Pompki z obrotem",
                   description: "Pompki z obrotem to wersja pompek wymagająca dodatkowo wykonania obrotu.",
                   image: "img/pushupNRotate.png",
+                  nameSound: "content/pushupandrotate.wav",
                   videos: ["//www.youtube.com/embed/qHQ_E-f5278"],
                   procedure: "Przyjmij klasyczną pozycję do pompek, ale podczas podnoszenia się obróć się tak, by wyprostowana prawa ręka znalazła się w górze nad głową. \
                               Wróć do pozycji wyjściowej, a następnie powtórz ćwiczenie, wyciągając ku górze lewą rękę."
@@ -257,6 +274,7 @@ angular.module('7minWorkout')
                   title: "Unoszenie bioder bokiem",
                   description: "Unoszenie bioder bokiem to wariant leżenia w podporze wykonywany w pozycji bocznej.",
                   image: "img/sideplank.png",
+                  nameSound: "content/sideplank.wav",
                   videos: ["//www.youtube.com/embed/wqzrb67Dwf8", "//www.youtube.com/embed/_rdfjFSFKMY"],
                   procedure: "Połóż się na boku tak, aby ciało tworzyło linię prostą od głowy do stóp, opierając ciężar na przedramieniu. \
                               Łokieć powinien się znajdować bezpośrednio poniżej barku. \
@@ -272,6 +290,49 @@ angular.module('7minWorkout')
       var init = function () {
           startWorkout();
       };
+
+      init();
+  }]);
+
+angular.module('7minWorkout')
+  .controller('WorkoutAudioController', ['$scope', '$timeout', function ($scope, $timeout) {
+      $scope.exercisesAudio = [];
+
+      var workoutPlanwatch = $scope.$watch('workoutPlan', function (newValue, oldValue) {
+          if (newValue) {  // newValue==workoutPlan
+              angular.forEach($scope.workoutPlan.exercises, function (exercise) {
+                  $scope.exercisesAudio.push({ src: exercise.details.nameSound, type: "audio/wav" });
+              });
+              workoutPlanwatch();       // przerywamy obserwację zmian właściwości
+          }
+      });
+
+      $scope.$watch('currentExercise', function (newValue, oldValue) {
+          if (newValue && newValue != oldValue) {
+              if ($scope.currentExercise.details.name == 'rest') {
+                  $timeout(function () {
+                      $scope.nextUpAudio.play();
+                  }, 2000);
+                  $timeout(function () {
+                      $scope.nextUpExerciseAudio.play($scope.currentExerciseIndex + 1, true);
+                  }, 3000);
+              }
+          }
+      });
+                 
+      $scope.$watch('currentExerciseDuration', function (newValue, oldValue) {
+          if (newValue) {
+              if (newValue == $scope.currentExercise.duration / 2 && $scope.currentExercise.details.name != 'rest') {
+                  $scope.halfWayAudio.play();
+              }
+              else if (newValue == $scope.currentExercise.duration - 3) {
+                  $scope.aboutToCompleteAudio.play();
+              }
+          }
+      });
+
+      var init = function () {
+      }
 
       init();
   }]);
